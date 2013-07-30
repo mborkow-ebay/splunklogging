@@ -1,7 +1,7 @@
 ## INSTALLATION
 To install this Maven plugin, please run the following command:
-```mvn clean compile package install
-```
+
+    python mvn clean compile package install
 
 
 ## CONFIGURATION
