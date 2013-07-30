@@ -81,7 +81,7 @@ public class SplunkParser extends AbstractMojo {
 			aNode = childNodes.item(i);
 			String aName = aNode.getNodeName().trim();
 			if (aNode.getNodeType() == Node.ELEMENT_NODE ) {
-                if (aName.trim().equalsIgnoreCase("test-method")) {
+                if (aName.equalsIgnoreCase("test-method")) {
                     // since we are in a new test-method block we can clear all our old data...
                     StringBuffer buf = new StringBuffer();
                     clearPreviousTestData();
@@ -98,7 +98,6 @@ public class SplunkParser extends AbstractMojo {
                     getLog().info("Parsing results: " + buf.toString());
                     theOutput.add(buf.toString());
                     buf = new StringBuffer();
-                    
                 }
                 else if (aName.equalsIgnoreCase("class")) {
                     NamedNodeMap nnm = aNode.getAttributes();
