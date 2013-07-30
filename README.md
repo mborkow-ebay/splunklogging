@@ -19,10 +19,13 @@ After installation, in order to generate CSV files for Splunk to consume add the
     </build>
 
 The plugin assumes the XML file it will be converting to CSV is named testng-results.xml and is located in target/surefire-reports.  The output CSV will be generated in the same directory and be named testng-
-results.csv.  These three parameters can be configured within your POM with the following:
-- "generate-csv.fileLocation"
-- "generate-csv.outputFile"
-- "generate-csv.inputFile"
+results.csv.  These three parameters can also be configured in your POM, in the plugin's block, with the following:
+
+    <configuration>
+        <fileLocation>location/on/disk</fileLocation>
+		<inputFile>test-results.xml</inputFile>
+		<outputFile>splunk-output.csv</outputFile>
+    </configuration>
 
 ## USAGE
 Add the command line option "splunklogging:generate-csv" when running Maven.  For example:
