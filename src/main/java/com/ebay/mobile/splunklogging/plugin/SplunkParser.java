@@ -22,6 +22,10 @@ public class SplunkParser extends AbstractMojo {
     
     String fs = System.getProperty("file.separator");
     String className;
+    String reporterTextString = "";
+    String exceptionName = "";
+    String exceptionMessage = "";
+    String parameterString = "";
     List<String> theOutput;
     @Parameter(property = "generate-csv.fileLocation", defaultValue = "target/surefire-reports")
     String fileLocation;
@@ -61,11 +65,15 @@ public class SplunkParser extends AbstractMojo {
         return nl;
 	}
     
-    private void parseNode (Node n) {
-        parseNode(n, new StringBuffer());
+    private void clearPreviousTestData () {
+        
+        parameterString = "";
+        exceptionName = "";
+        exceptionMessage = "";
+        reporterTextString = "";
     }
     
-    private void parseNode (Node n, StringBuffer buf) {
+    private void parseNode (Node n) {
         
 		NodeList childNodes = n.getChildNodes();
 		Node aNode;
@@ -74,6 +82,9 @@ public class SplunkParser extends AbstractMojo {
 			String aName = aNode.getNodeName().trim();
 			if (aNode.getNodeType() == Node.ELEMENT_NODE ) {
                 if (aName.trim().equalsIgnoreCase("test-method")) {
+                    // since we are in a new test-method block we can clear all our old data...
+                    StringBuffer buf = new StringBuffer();
+                    clearPreviousTestData();
                     NamedNodeMap nnm = aNode.getAttributes();
                     String name = (nnm.getNamedItem("name")).getNodeValue().trim();
                     String started = parseDate((nnm.getNamedItem("started-at")).getNodeValue().trim());
@@ -81,28 +92,29 @@ public class SplunkParser extends AbstractMojo {
                     String duration = (nnm.getNamedItem("duration-ms")).getNodeValue().trim();
                     String status = (nnm.getNamedItem("status")).getNodeValue().trim().toLowerCase();
                     buf.append(className + ", " + name + ", " + status + ", " + duration + ", " + started + ", " + ended);
-                    parseNode(aNode, buf);
+                    parseNode(aNode);
+                    // we should now have all the data for our test-method and can prepare it for logging...
+                    buf.append("," + parameterString + "," + exceptionName + "," + exceptionMessage + "," + reporterTextString);
                     getLog().info("Parsing results: " + buf.toString());
                     theOutput.add(buf.toString());
                     buf = new StringBuffer();
+                    
                 }
-                else if (aName.trim().equalsIgnoreCase("class")) {
+                else if (aName.equalsIgnoreCase("class")) {
                     NamedNodeMap nnm = aNode.getAttributes();
                     className = (nnm.getNamedItem("name")).getNodeValue().trim();
                 }
-                else if (aName.trim().equalsIgnoreCase("exception")) {
+                else if (aName.equalsIgnoreCase("exception")) {
                     NamedNodeMap nnm = aNode.getAttributes();
-                    String exception = (nnm.getNamedItem("class")).getNodeValue().trim();
-                    buf.append(", " + exception);
+                    exceptionName = (nnm.getNamedItem("class")).getNodeValue().trim();
                     // now we want to get the message that goes with the exception
                     Node message = parseNodeNamed("message", aNode);
                     Node cdata = parseNodeNamed("#cdata-section", message);
-                    String exceptionMessage = cdata.getNodeValue();
+                    exceptionMessage = cdata.getNodeValue();
                     // since we are formatting for CSV, replace commans with semi-colons
                     exceptionMessage = exceptionMessage.replace(',',';');
-                    buf.append("," + exceptionMessage);
                 }
-                else if (aName.trim().equalsIgnoreCase("params")) {
+                else if (aName.equalsIgnoreCase("params")) {
                     StringBuffer theParams = new StringBuffer();
                     NodeList paramsNodes = aNode.getChildNodes();
                     for (int x = 0; x < paramsNodes.getLength(); ++x) {
@@ -113,10 +125,23 @@ public class SplunkParser extends AbstractMojo {
                             theParams.append(cdata.getNodeValue() + ",");
                         }
                     }
-                    String theParameters = theParams.toString();
+                    parameterString = theParams.toString();
+                    parameterString = parameterString.substring(0, parameterString.length() -1);
                     // since we are formatting for CSV, replace commans with semi-colons
-                    theParameters = theParameters.replace(',',';');
-                    buf.append("," + theParameters.substring(0,(theParameters.length()-1)));
+                    parameterString = parameterString.replace(',',';');
+                }
+                else if (aName.equalsIgnoreCase("reporter-output")) {
+                    NodeList lineNodes = aNode.getChildNodes();
+                    StringBuffer reporterText = new StringBuffer();
+                    for (int x = 0; x < lineNodes.getLength(); ++x) {
+                        Node lineNode = lineNodes.item(x);
+                        if (lineNode.getNodeName().equalsIgnoreCase("line")) {
+                            String lineText = (parseNodeNamed("#cdata-section",lineNodes.item(x))).getNodeValue();
+                            reporterText.append(lineText);
+                        }
+                    }
+                    reporterTextString = reporterText.toString();
+                    reporterTextString = reporterTextString.replace(',',';');
                 }
 				parseNode(aNode);
 			}
@@ -159,8 +184,8 @@ public class SplunkParser extends AbstractMojo {
         
         BufferedWriter out = new BufferedWriter(new FileWriter(fileLocation + fs + outputFile));
         // write headers so Splunk knows what to index
-        getLog().info("Writing CSV headers: class,method,status,duration, start, end,parameters,exception,exception-message");
-        out.write("class,method,status,duration, start, end,parameters,exception,exception-message");
+        getLog().info("Writing CSV headers: class,method,status,duration, start, end,parameters,exception,exception-message,reporter-output");
+        out.write("class,method,status,duration, start, end,parameters,exception,exception-message,reporter-output");
         out.newLine();
         for (String line : theOutput) {
             getLog().info("Adding to CSV output: " + line);
