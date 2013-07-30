@@ -1,6 +1,8 @@
 ## INSTALLATION
 To install this Maven plugin, please run the following command:
 ```mvn clean compile package install
+```
+
 
 ## CONFIGURATION
 After installation, in order to generate CSV files for Splunk to consume add the following to your POM file in the build section:
