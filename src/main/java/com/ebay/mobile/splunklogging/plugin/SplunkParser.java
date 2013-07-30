@@ -55,15 +55,15 @@ public class SplunkParser extends AbstractMojo {
     
     private NodeList getResponseNodes (String xmlText) throws Exception {
         
-		ByteArrayInputStream bais = new ByteArrayInputStream(xmlText.getBytes("UTF-8"));
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		Document doc = db.parse(bais);
+        ByteArrayInputStream bais = new ByteArrayInputStream(xmlText.getBytes("UTF-8"));
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(bais);
         
-		Element e = doc.getDocumentElement();
-		NodeList nl = e.getChildNodes();
+        Element e = doc.getDocumentElement();
+        NodeList nl = e.getChildNodes();
         return nl;
-	}
+    }
     
     private void clearPreviousTestData () {
         
