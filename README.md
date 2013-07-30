@@ -19,7 +19,7 @@ After installation, in order to generate CSV files for Splunk to consume add the
     </build>
 
 The plugin assumes the XML file it will be converting to CSV is named testng-results.xml and is located in target/surefire-reports.  The output CSV will be generated in the same directory and be named testng-
-results.csv.  These three parameters can be configured within your POW with the following:
+results.csv.  These three parameters can be configured within your POM with the following:
 - "generate-csv.fileLocation"
 - "generate-csv.outputFile"
 - "generate-csv.inputFile"
