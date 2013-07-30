@@ -75,12 +75,12 @@ public class SplunkParser extends AbstractMojo {
     
     private void parseNode (Node n) {
         
-		NodeList childNodes = n.getChildNodes();
-		Node aNode;
-		for (int i = 0; i < childNodes.getLength(); ++i) {
-			aNode = childNodes.item(i);
-			String aName = aNode.getNodeName().trim();
-			if (aNode.getNodeType() == Node.ELEMENT_NODE ) {
+        NodeList childNodes = n.getChildNodes();
+        Node aNode;
+        for (int i = 0; i < childNodes.getLength(); ++i) {
+            aNode = childNodes.item(i);
+            String aName = aNode.getNodeName().trim();
+            if (aNode.getNodeType() == Node.ELEMENT_NODE ) {
                 if (aName.equalsIgnoreCase("test-method")) {
                     // since we are in a new test-method block we can clear all our old data...
                     StringBuffer buf = new StringBuffer();
@@ -142,10 +142,10 @@ public class SplunkParser extends AbstractMojo {
                     reporterTextString = reporterText.toString();
                     reporterTextString = reporterTextString.replace(',',';');
                 }
-				parseNode(aNode);
-			}
-		}
-	}
+                parseNode(aNode);
+            }
+        }
+    }
     
     private Node parseNodeNamed (String s, Node n) {
         
