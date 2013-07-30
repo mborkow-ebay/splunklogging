@@ -98,6 +98,7 @@ public class SplunkParser extends AbstractMojo {
                     Node message = parseNodeNamed("message", aNode);
                     Node cdata = parseNodeNamed("#cdata-section", message);
                     String exceptionMessage = cdata.getNodeValue();
+                    // since we are formatting for CSV, replace commans with semi-colons
                     exceptionMessage = exceptionMessage.replace(',',';');
                     buf.append("," + exceptionMessage);
                 }
@@ -113,6 +114,7 @@ public class SplunkParser extends AbstractMojo {
                         }
                     }
                     String theParameters = theParams.toString();
+                    // since we are formatting for CSV, replace commans with semi-colons
                     theParameters = theParameters.replace(',',';');
                     buf.append("," + theParameters.substring(0,(theParameters.length()-1)));
                 }
