@@ -26,7 +26,8 @@ results.csv.  These three parameters can be configured within your POW with the 
 
 ## USAGE
 Add the command line option "splunklogging:generate-csv" when running Maven.  For example:
-mvn failsafe:integration-test splunklogging:generate-csv
+
+    mvn failsafe:integration-test splunklogging:generate-csv
 
 Your CSV will be generated and, if Splunk is monitoring that file, automatically indexed
 
