@@ -91,7 +91,14 @@ public class SplunkParser extends AbstractMojo {
                     String ended = parseDate((nnm.getNamedItem("finished-at")).getNodeValue().trim());
                     String duration = (nnm.getNamedItem("duration-ms")).getNodeValue().trim();
                     String status = (nnm.getNamedItem("status")).getNodeValue().trim().toLowerCase();
-                    buf.append(className + ", " + name + ", " + status + ", " + duration + ", " + started + ", " + ended);
+                    String description = "";
+                    try {
+                        description = (nnm.getNamedItem("description")).getNodeValue().trim().toLowerCase();
+                    }
+                    catch (Exception e) {
+                        // do nothing...there might not be a description
+                    }
+                    buf.append(className + ", " + name + ", " + status + ", " + duration + ", " + started + ", " + ended + "," + description);
                     parseNode(aNode);
                     // we should now have all the data for our test-method and can prepare it for logging...
                     buf.append("," + parameterString + "," + exceptionName + "," + exceptionMessage + "," + reporterTextString);
@@ -183,8 +190,8 @@ public class SplunkParser extends AbstractMojo {
         
         BufferedWriter out = new BufferedWriter(new FileWriter(fileLocation + fs + outputFile));
         // write headers so Splunk knows what to index
-        getLog().info("Writing CSV headers: class,method,status,duration, start, end,parameters,exception,exception-message,reporter-output");
-        out.write("class,method,status,duration, start, end,parameters,exception,exception-message,reporter-output");
+        getLog().info("Writing CSV headers: class,method,status,duration, start, end,description, parameters,exception,exception-message,reporter-output");
+        out.write("class,method,status,duration, start, end,description,parameters,exception,exception-message,reporter-output");
         out.newLine();
         for (String line : theOutput) {
             getLog().info("Adding to CSV output: " + line);
