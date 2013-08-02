@@ -73,6 +73,15 @@ public class SplunkParser extends AbstractMojo {
         reporterTextString = "";
     }
     
+    private String cleanAndTrim (String s) {
+        // splunk seems to have a hard time with strings that are too long...
+        if (s.length() > 2499) {
+            s = s.substring(0,2499);
+        }
+        s = s.replace(',',';');
+        return s;
+    }
+    
     private void parseNode (Node n) {
         
         NodeList childNodes = n.getChildNodes();
@@ -94,7 +103,7 @@ public class SplunkParser extends AbstractMojo {
                     String description = "";
                     try {
                         description = (nnm.getNamedItem("description")).getNodeValue().trim().toLowerCase();
-                        description = description.replace(',',';');
+                        description = cleanAndTrim(description);
                     }
                     catch (Exception e) {
                         // do nothing...there might not be a description
@@ -119,7 +128,7 @@ public class SplunkParser extends AbstractMojo {
                     Node cdata = parseNodeNamed("#cdata-section", message);
                     exceptionMessage = cdata.getNodeValue();
                     // since we are formatting for CSV, replace commans with semi-colons
-                    exceptionMessage = exceptionMessage.replace(',',';');
+                    exceptionMessage = cleanAndTrim(exceptionMessage);
                 }
                 else if (aName.equalsIgnoreCase("params")) {
                     StringBuffer theParams = new StringBuffer();
@@ -135,7 +144,7 @@ public class SplunkParser extends AbstractMojo {
                     parameterString = theParams.toString();
                     parameterString = parameterString.substring(0, parameterString.length() -1);
                     // since we are formatting for CSV, replace commans with semi-colons
-                    parameterString = parameterString.replace(',',';');
+                    parameterString = cleanAndTrim(parameterString);
                 }
                 else if (aName.equalsIgnoreCase("reporter-output")) {
                     NodeList lineNodes = aNode.getChildNodes();
@@ -147,8 +156,7 @@ public class SplunkParser extends AbstractMojo {
                             reporterText.append(lineText);
                         }
                     }
-                    reporterTextString = reporterText.toString();
-                    reporterTextString = reporterTextString.replace(',',';');
+                    reporterTextString = cleanAndTrim(reporterText.toString());
                 }
                 parseNode(aNode);
             }
