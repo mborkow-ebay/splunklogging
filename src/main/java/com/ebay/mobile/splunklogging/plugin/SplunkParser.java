@@ -94,6 +94,7 @@ public class SplunkParser extends AbstractMojo {
                     String description = "";
                     try {
                         description = (nnm.getNamedItem("description")).getNodeValue().trim().toLowerCase();
+                        description = description.replace(',',';');
                     }
                     catch (Exception e) {
                         // do nothing...there might not be a description
