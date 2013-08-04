@@ -125,10 +125,14 @@ public class SplunkParser extends AbstractMojo {
                     exceptionName = (nnm.getNamedItem("class")).getNodeValue().trim();
                     // now we want to get the message that goes with the exception
                     Node message = parseNodeNamed("message", aNode);
-                    Node cdata = parseNodeNamed("#cdata-section", message);
-                    exceptionMessage = cdata.getNodeValue();
-                    // since we are formatting for CSV, replace commans with semi-colons
-                    exceptionMessage = cleanAndTrim(exceptionMessage);
+                    if (message != null) {
+                        Node cdata = parseNodeNamed("#cdata-section", message);
+                        if (cdata != null) {
+                            exceptionMessage = cdata.getNodeValue();
+                            // since we are formatting for CSV, replace commans with semi-colons
+                            exceptionMessage = cleanAndTrim(exceptionMessage);
+                        }
+                    }
                 }
                 else if (aName.equalsIgnoreCase("params")) {
                     StringBuffer theParams = new StringBuffer();
@@ -164,6 +168,7 @@ public class SplunkParser extends AbstractMojo {
     }
     
     private Node parseNodeNamed (String s, Node n) {
+        
         
         NodeList nl = n.getChildNodes();
         for (int i = 0; i < nl.getLength(); ++i) {
@@ -221,6 +226,7 @@ public class SplunkParser extends AbstractMojo {
             getLog().info("CSV file generated: " + fileLocation + fs + outputFile);
         }
         catch (Exception e) {
+            e.printStackTrace();
             getLog().info("Exception occured: " + e.getMessage());
         }
     }
