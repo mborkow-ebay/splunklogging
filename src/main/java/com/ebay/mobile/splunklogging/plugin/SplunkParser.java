@@ -27,7 +27,7 @@ public class SplunkParser extends AbstractMojo {
     String exceptionMessage = "";
     String parameterString = "";
     List<String> theOutput;
-    @Parameter(property = "generate-csv.fileLocation", defaultValue = "target/surefire-reports")
+    @Parameter(property = "generate-csv.fileLocation", defaultValue = "${project.basedir}/target/surefire-reports")
     String fileLocation;
     @Parameter(property = "generate-csv.outputFile", defaultValue = "testng-results.csv")
     String outputFile;
