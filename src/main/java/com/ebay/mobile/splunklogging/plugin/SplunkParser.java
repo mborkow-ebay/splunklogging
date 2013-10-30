@@ -22,10 +22,10 @@ public class SplunkParser extends AbstractMojo {
     
     String fs = System.getProperty("file.separator");
     String className;
-    String reporterTextString = "null";
-    String exceptionName = "null";
-    String exceptionMessage = "null";
-    String parameterString = "null";
+    String reporterTextString = "NA";
+    String exceptionName = "NA";
+    String exceptionMessage = "NA";
+    String parameterString = "NA";
     List<String> theOutput;
     @Parameter(property = "generate-csv.fileLocation", defaultValue = "${project.basedir}/target/surefire-reports")
     String fileLocation;
@@ -67,10 +67,10 @@ public class SplunkParser extends AbstractMojo {
     
     private void clearPreviousTestData () {
         
-        parameterString = "null";
-        exceptionName = "null";
-        exceptionMessage = "null";
-        reporterTextString = "null";
+        parameterString = "NA";
+        exceptionName = "NA";
+        exceptionMessage = "NA";
+        reporterTextString = "NA";
     }
     
     private String cleanAndTrim (String s) {
@@ -100,7 +100,7 @@ public class SplunkParser extends AbstractMojo {
                     String ended = parseDate((nnm.getNamedItem("finished-at")).getNodeValue().trim());
                     String duration = (nnm.getNamedItem("duration-ms")).getNodeValue().trim();
                     String status = (nnm.getNamedItem("status")).getNodeValue().trim().toLowerCase();
-                    String description = "null";
+                    String description = "NA";
                     try {
                         description = (nnm.getNamedItem("description")).getNodeValue().trim().toLowerCase();
                         description = cleanAndTrim(description);
