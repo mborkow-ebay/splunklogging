@@ -80,6 +80,9 @@ public class SplunkParser extends AbstractMojo {
         if (s.length() > 2499) {
             s = s.substring(0,2499);
         }
+        while (s.endsWith("\\")) {
+            s = s.substring(s.length() -1);
+        }
         s = s.replace(',',';');
         s = s.replace('"','\'');
         //s = s.replace('"',''');
