@@ -206,7 +206,7 @@ public class SplunkParser extends AbstractMojo {
     
     private void writeCSVFile () throws Exception {
         
-        CSVWriter writer = new CSVWriter(new FileWriter(fileLocation + fs + outputFile));
+        CSVWriter writer = new CSVWriter(new FileWriter(fileLocation + fs + outputFile), '\t');
         BufferedWriter out = new BufferedWriter(new FileWriter(fileLocation + fs + outputFile));
         // write headers so Splunk knows what to index
         getLog().info("Writing CSV headers: class,method,status,duration, start, end,description, parameters,exception,exception-message,reporter-output");
