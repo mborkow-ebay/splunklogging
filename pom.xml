@@ -8,7 +8,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-    <version>1.0</version>
+    <version>BETA2.0</version>
     <name>eBay-Mobile-Labs-Splunk-Logging-Plugin</name>
     
     <build>
@@ -40,6 +40,11 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>6.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>2.3</version>
         </dependency>
     </dependencies>
 </project>
