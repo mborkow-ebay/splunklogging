@@ -78,14 +78,18 @@ public class SplunkParser extends AbstractMojo {
     private String cleanAndTrim (String s) {
         // splunk seems to have a hard time with strings that are too long...
         if (s.length() > 2499) {
+            System.out.println("shortening string length to accomodate splunk's max length");
             s = s.substring(0,2499);
         }
+        
+        // splunk seems to have a hard time when the strings end in a trailing slash...
         while (s.endsWith("\\")) {
-            s = s.substring(s.length() -1);
+            System.out.println("removing slash");
+            s = s.substring(0, s.length() -2);
         }
         s = s.replace(',',';');
         s = s.replace('"','\'');
-        //s = s.replace('"',''');
+
         return s;
     }
     
@@ -213,20 +217,21 @@ public class SplunkParser extends AbstractMojo {
         BufferedWriter out = new BufferedWriter(new FileWriter(fileLocation + fs + outputFile));
         // write headers so Splunk knows what to index
         getLog().info("Writing CSV headers: class,method,status,duration, start, end,description, parameters,exception,exception-message,reporter-output");
-        //out.write("class,method,status,duration, start, end,description,parameters,exception,exception-message,reporter-output");
+
         String theHeaders = "class,method,status,duration, start, end,description,parameters,exception,exception-message,reporter-output";
         String[] headerArray = theHeaders.split(",");
         writer.writeNext(headerArray);
-        //out.newLine();
+
         for (String line : theOutput) {
             getLog().info("Adding to CSV output: " + line);
             String[] lineArray = line.split(",");
-            //out.write(line);
-            //out.newLine();
+            for (String s : lineArray) {
+                System.out.println(s);
+            }
+
             writer.writeNext(lineArray);
         }
-        //out.flush();
-        //out.close();
+
         writer.close();
     }
     
