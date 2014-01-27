@@ -76,10 +76,16 @@ public class SplunkParser extends AbstractMojo {
     }
     
     private String cleanAndTrim (String s) {
+        
+        // if s is blank, we want to return "NA"
+        if (s.trim().equals("")) {
+            return "NA";
+        }
+        
         // splunk seems to have a hard time with strings that are too long...
-        if (s.length() > 2499) {
+        if (s.length() > 2249) {
             System.out.println("shortening string length to accomodate splunk's max length");
-            s = s.substring(0,2499);
+            s = s.substring(0,2249);
         }
         
         // splunk seems to have a hard time when the strings end in a trailing slash...
