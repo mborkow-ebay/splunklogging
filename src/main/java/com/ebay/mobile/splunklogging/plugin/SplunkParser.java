@@ -17,8 +17,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import au.com.bytecode.opencsv.*;
-
 @Mojo( name = "generate-csv")
 public class SplunkParser extends AbstractMojo {
     
@@ -76,6 +74,11 @@ public class SplunkParser extends AbstractMojo {
     }
     
     private String cleanAndTrim (String s) {
+        
+        if (s.trim().equals("")) {
+            return "NA";
+        }
+        
         // splunk seems to have a hard time with strings that are too long...
         if (s.length() > 2499) {
             System.out.println("shortening string length to accomodate splunk's max length");
@@ -225,28 +228,15 @@ public class SplunkParser extends AbstractMojo {
     
     private void writeCSVFile () throws Exception {
         
-        CSVWriter writer = new CSVWriter(new FileWriter(fileLocation + fs + outputFile));
         BufferedWriter out = new BufferedWriter(new FileWriter(fileLocation + fs + outputFile));
-        // write headers so Splunk knows what to index
-        //getLog().info("Writing CSV headers: class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output");
-
-        //String theHeaders = "class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output";
-        //String[] headerArray = theHeaders.split(",");
-        //writer.writeNext(headerArray);
 
         for (String line : theOutput) {
             getLog().info("Adding to CSV output: " + line);
-            //String[] lineArray = line.split(",");
-            //for (String s : lineArray) {
-              //  System.out.println(s);
-            //}
             out.write(line);
             out.newLine();
-            //writer.writeNext(lineArray);
         }
         out.flush();
         out.close();
-        //writer.close();
     }
     
     public void execute () throws MojoExecutionException {
