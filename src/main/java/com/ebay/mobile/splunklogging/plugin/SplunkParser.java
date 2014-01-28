@@ -126,10 +126,10 @@ public class SplunkParser extends AbstractMojo {
                         // do nothing...there might not be a description
                     }
                     //String theHeaders = "class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output";
-                    buf.append("class=\"" + className + "\",method=\"" + name + "\",status=\"" + status + "\",duration=\"" + duration + "\",start=\"" + started + "\",end=\"" + ended + "\",description=\"" + description);
+                    buf.append("class=\"" + className + "\", method=\"" + name + "\", status=\"" + status + "\", duration=\"" + duration + "\", start=\"" + started + "\", end=\"" + ended + "\", description=\"" + description);
                     parseNode(aNode);
                     // we should now have all the data for our test-method and can prepare it for logging...
-                    buf.append("\",parameters=\"" + parameterString + "\",exception=\"" + exceptionName + "\",exception-message=\"" + exceptionMessage + "\",reporter-output=\"" + reporterTextString + "\"");
+                    buf.append("\", parameters=\"" + parameterString + "\", exception=\"" + exceptionName + "\", exception-message=\"" + exceptionMessage + "\", reporter-output=\"" + reporterTextString + "\"");
                     getLog().info("Parsing results: " + buf.toString());
                     theOutput.add(buf.toString());
                     buf = new StringBuffer();
