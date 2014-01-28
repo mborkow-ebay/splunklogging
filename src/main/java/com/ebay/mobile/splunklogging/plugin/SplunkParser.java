@@ -119,10 +119,22 @@ public class SplunkParser extends AbstractMojo {
                     catch (Exception e) {
                         // do nothing...there might not be a description
                     }
-                    buf.append(className + "," + name + "," + status + "," + duration + "," + started + "," + ended + "," + description);
+                    String theHeaders = "class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output";
+                    buf.append(started + ",");
+                    buf.append("class=\"" + className + "\",");
+                    buf.append("method=\"" + name + "\",");
+                    buf.append("status=\"" + status + "\",");
+                    buf.append("duration=\"" + duration + "\",");
+                    buf.append("description=\"" + description + "\",");
+            
+                    //buf.append(className + "," + name + "," + status + "," + duration + "," + started + "," + ended + "," + description);
                     parseNode(aNode);
                     // we should now have all the data for our test-method and can prepare it for logging...
-                    buf.append("," + parameterString + "," + exceptionName + "," + exceptionMessage + "," + reporterTextString);
+                    //buf.append("," + parameterString + "," + exceptionName + "," + exceptionMessage + "," + reporterTextString);
+                    buf.append("parameters=\"" + parameterString + "\",");
+                    buf.append("exception=\"" + exceptionName + "\",");
+                    buf.append("exception-message=\"" + exceptionMessage + "\",");
+                    buf.append("reporter-output=\"" + reporterTextString + "\",");
                     getLog().info("Parsing results: " + buf.toString());
                     theOutput.add(buf.toString());
                     buf = new StringBuffer();
@@ -216,23 +228,25 @@ public class SplunkParser extends AbstractMojo {
         CSVWriter writer = new CSVWriter(new FileWriter(fileLocation + fs + outputFile));
         BufferedWriter out = new BufferedWriter(new FileWriter(fileLocation + fs + outputFile));
         // write headers so Splunk knows what to index
-        getLog().info("Writing CSV headers: class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output");
+        //getLog().info("Writing CSV headers: class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output");
 
-        String theHeaders = "class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output";
-        String[] headerArray = theHeaders.split(",");
-        writer.writeNext(headerArray);
+        //String theHeaders = "class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output";
+        //String[] headerArray = theHeaders.split(",");
+        //writer.writeNext(headerArray);
 
         for (String line : theOutput) {
             getLog().info("Adding to CSV output: " + line);
-            String[] lineArray = line.split(",");
-            for (String s : lineArray) {
-                System.out.println(s);
-            }
-
-            writer.writeNext(lineArray);
+            //String[] lineArray = line.split(",");
+            //for (String s : lineArray) {
+              //  System.out.println(s);
+            //}
+            out.write(line);
+            out.newLine();
+            //writer.writeNext(lineArray);
         }
-
-        writer.close();
+        out.flush();
+        out.close();
+        //writer.close();
     }
     
     public void execute () throws MojoExecutionException {
