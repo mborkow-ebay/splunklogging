@@ -76,16 +76,10 @@ public class SplunkParser extends AbstractMojo {
     }
     
     private String cleanAndTrim (String s) {
-        
-        // if s is blank, we want to return "NA"
-        if (s.trim().equals("")) {
-            return "NA";
-        }
-        
         // splunk seems to have a hard time with strings that are too long...
-        if (s.length() > 2249) {
+        if (s.length() > 2499) {
             System.out.println("shortening string length to accomodate splunk's max length");
-            s = s.substring(0,2249);
+            s = s.substring(0,2499);
         }
         
         // splunk seems to have a hard time when the strings end in a trailing slash...
@@ -125,11 +119,10 @@ public class SplunkParser extends AbstractMojo {
                     catch (Exception e) {
                         // do nothing...there might not be a description
                     }
-                    //String theHeaders = "class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output";
-                    buf.append("class=\"" + className + "\", method=\"" + name + "\", status=\"" + status + "\", duration=\"" + duration + "\", start=\"" + started + "\", end=\"" + ended + "\", description=\"" + description);
+                    buf.append(className + "," + name + "," + status + "," + duration + "," + started + "," + ended + "," + description);
                     parseNode(aNode);
                     // we should now have all the data for our test-method and can prepare it for logging...
-                    buf.append("\", parameters=\"" + parameterString + "\", exception=\"" + exceptionName + "\", exception-message=\"" + exceptionMessage + "\", reporter-output=\"" + reporterTextString + "\"");
+                    buf.append("," + parameterString + "," + exceptionName + "," + exceptionMessage + "," + reporterTextString);
                     getLog().info("Parsing results: " + buf.toString());
                     theOutput.add(buf.toString());
                     buf = new StringBuffer();
@@ -223,28 +216,23 @@ public class SplunkParser extends AbstractMojo {
         CSVWriter writer = new CSVWriter(new FileWriter(fileLocation + fs + outputFile));
         BufferedWriter out = new BufferedWriter(new FileWriter(fileLocation + fs + outputFile));
         // write headers so Splunk knows what to index
-        //getLog().info("Writing CSV headers: class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output");
+        getLog().info("Writing CSV headers: class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output");
 
         String theHeaders = "class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output";
         String[] headerArray = theHeaders.split(",");
-        //writer.writeNext(headerArray);
+        writer.writeNext(headerArray);
 
         for (String line : theOutput) {
             getLog().info("Adding to CSV output: " + line);
-            out.write(line);
-            out.newLine();
-            /*
             String[] lineArray = line.split(",");
             for (String s : lineArray) {
                 System.out.println(s);
             }
-             */
 
-            //writer.writeNext(lineArray);
+            writer.writeNext(lineArray);
         }
-        out.flush();
-        out.close();
-        //writer.close();
+
+        writer.close();
     }
     
     public void execute () throws MojoExecutionException {
