@@ -120,7 +120,7 @@ public class SplunkParser extends AbstractMojo {
                         // do nothing...there might not be a description
                     }
                     String theHeaders = "class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output";
-                    buf.append(started + ",");
+                    buf.append("timestamp=\"" + started + "\",");
                     buf.append("class=\"" + className + "\",");
                     buf.append("method=\"" + name + "\",");
                     buf.append("status=\"" + status + "\",");
