@@ -122,7 +122,7 @@ public class SplunkParser extends AbstractMojo {
                     catch (Exception e) {
                         // do nothing...there might not be a description
                     }
-                    String theHeaders = "class,method,status,duration,start,end,description,parameters,exception,exception-message,reporter-output";
+                    
                     buf.append("timestamp=\"" + started + "\",");
                     buf.append("class=\"" + className + "\",");
                     buf.append("method=\"" + name + "\",");
@@ -130,10 +130,9 @@ public class SplunkParser extends AbstractMojo {
                     buf.append("duration=\"" + duration + "\",");
                     buf.append("description=\"" + description + "\",");
             
-                    //buf.append(className + "," + name + "," + status + "," + duration + "," + started + "," + ended + "," + description);
                     parseNode(aNode);
+                    
                     // we should now have all the data for our test-method and can prepare it for logging...
-                    //buf.append("," + parameterString + "," + exceptionName + "," + exceptionMessage + "," + reporterTextString);
                     buf.append("parameters=\"" + parameterString + "\",");
                     buf.append("exception=\"" + exceptionName + "\",");
                     buf.append("exception-message=\"" + exceptionMessage + "\",");

@@ -12,7 +12,7 @@ After installation, in order to generate CSV files for Splunk to consume add the
             <plugin>
                 <groupId>com.ebay.mobile.splunklogging.plugin</groupId>
                 <artifactId>splunklogging-maven-plugin</artifactId>
-                <version>BETA2.0</version>
+                <version>2.0</version>
             </plugin>
 	    ....
         </plugins>
