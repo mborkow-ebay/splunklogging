@@ -167,7 +167,12 @@ public class SplunkParser extends AbstractMojo {
                         if (paramsNode.getNodeName().equalsIgnoreCase("param")) {
                             Node value = parseNodeNamed("value", paramsNode);
                             Node cdata = parseNodeNamed("#cdata-section", value);
-                            theParams.append(cdata.getNodeValue() + ",");
+                            if (cdata != null) {
+                                theParams.append(cdata.getNodeValue() + ",");
+                            }
+                            else {
+                                theParams.append("\"NA\",");
+                            }
                         }
                     }
                     parameterString = theParams.toString();
