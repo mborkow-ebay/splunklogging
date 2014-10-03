@@ -5,7 +5,7 @@ To install this Maven plugin, please run the following command:
 
 
 ## CONFIGURATION
-After installation, in order to generate CSV files for Splunk to consume add the following to your POM file in the build section:
+After installation, in order to generate JSON files for Splunk to consume add the following to your POM file in the build section:
 
     <build>
         <plugins>
@@ -18,21 +18,21 @@ After installation, in order to generate CSV files for Splunk to consume add the
         </plugins>
     </build>
 
-The plugin assumes the XML file it will be converting to CSV is named testng-results.xml and is located in target/surefire-reports.  The output CSV will be generated in the same directory and be named testng-
-results.csv.  These three parameters can also be configured in your POM, in the plugin's block, with the following:
+The plugin assumes the XML file it will be converting to JSON is named testng-results.xml and is located in target/surefire-reports.  The output JSON will be generated in the same directory and be named testng-
+results.json.  These three parameters can also be configured in your POM, in the plugin's block, with the following:
 
     <configuration>
         <fileLocation>location/on/disk</fileLocation>
 		<inputFile>test-results.xml</inputFile>
-		<outputFile>splunk-output.csv</outputFile>
+		<outputFile>splunk-output.json</outputFile>
     </configuration>
 
 ## USAGE
-Add the command line option "splunklogging:generate-csv" when running Maven.  For example:
+Add the command line option "splunklogging:generate-json" when running Maven.  For example:
 
-    mvn failsafe:integration-test splunklogging:generate-csv
+    mvn failsafe:integration-test splunklogging:generate-json
 
-Your CSV will be generated and, if Splunk is monitoring that file, automatically indexed
+Your JSON will be generated and, if Splunk is monitoring that file, automatically indexed
 
 ## LICENSE
 License - Apache 2: http://www.apache.org/licenses/LICENSE-2.0
