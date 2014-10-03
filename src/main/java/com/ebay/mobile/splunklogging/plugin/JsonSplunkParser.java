@@ -18,8 +18,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-@Mojo( name = "generate-csv")
-public class SplunkParser extends AbstractMojo {
+@Mojo( name = "generate-json")
+public class JsonSplunkParser extends AbstractMojo {
     
     String fs = System.getProperty("file.separator");
     String className;
@@ -28,16 +28,16 @@ public class SplunkParser extends AbstractMojo {
     String exceptionMessage = "NA";
     String parameterString = "NA";
     List<String> theOutput;
-    @Parameter(property = "generate-csv.fileLocation", defaultValue = "${project.basedir}/target/surefire-reports")
+    @Parameter(property = "generate-json.fileLocation", defaultValue = "${project.basedir}/target/surefire-reports")
     String fileLocation;
-    @Parameter(property = "generate-csv.outputFile", defaultValue = "testng-results.csv")
+    @Parameter(property = "generate-json.outputFile", defaultValue = "testng-results.json")
     String outputFile;
-    @Parameter(property = "generate-csv.inputFile", defaultValue = "testng-results.xml")
+    @Parameter(property = "generate-json.inputFile", defaultValue = "testng-results.xml")
     String inputFile;
     
-    public SplunkParser () {}
+    public JsonSplunkParser () {}
     
-    public SplunkParser (String fileLocation, String inputFile, String outputFile) {
+    public JsonSplunkParser (String fileLocation, String inputFile, String outputFile) {
         this.fileLocation = fileLocation;
         this.outputFile = outputFile;
         this.inputFile = inputFile;
