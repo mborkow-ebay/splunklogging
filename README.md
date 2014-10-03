@@ -33,6 +33,7 @@ Add the command line option "splunklogging:generate-json" when running Maven.  F
     mvn failsafe:integration-test splunklogging:generate-json
 
 Your JSON will be generated and, if Splunk is monitoring that file, automatically indexed
+* Note: for anyone who prefers the previous CSV format output, that command is still supported (and remains unchanged: mvn failsafe:integration-test splunklogging:generate-csv)
 
 ## LICENSE
 License - Apache 2: http://www.apache.org/licenses/LICENSE-2.0
